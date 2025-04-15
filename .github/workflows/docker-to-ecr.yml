@@ -1,0 +1,24 @@
+name: Build and Push Docker Image to ECR
+
+on:
+  push:
+    branches: [ main ]  # or your preferred branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.ECR_REPO }} .
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push ${{ secrets.ECR_REPO }}
